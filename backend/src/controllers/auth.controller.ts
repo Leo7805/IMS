@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import type { StringValue } from 'ms';
-import { prisma } from '../db.js';
+import prisma from '../db.js';
 
 const signToken = (payload: object) => {
   const secret = process.env.JWT_SECRET;
@@ -13,7 +13,7 @@ const signToken = (payload: object) => {
   });
 };
 
-export const registerAuthor = async (
+export const registerAuth = async (
   req: Request,
   res: Response,
   next: NextFunction,
@@ -72,7 +72,7 @@ export const registerAuthor = async (
   }
 };
 
-export const loginAuthor = async (
+export const loginAuth = async (
   req: Request,
   res: Response,
   next: NextFunction,

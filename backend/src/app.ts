@@ -1,21 +1,20 @@
 import express from 'express';
 import healthRouter from './routes/health.route.js';
-import authorRouter from './routes/author.route.js';
+import authRouter from './routes/auth.route.js';
 import protectedRouter from './routes/protected.route.js';
-import adminOnlyRouter from './routes/adminOnly.route.js';
+import adminRouter from './routes/admin.route.js';
+import usersRouter from './routes/users.route.js';
 import errorHandler from './middleware/error.js';
 
 const app = express();
 
 app.use(express.json());
 
-app.use(healthRouter);
-
-app.use('/api/auth', authorRouter);
-
-app.use(protectedRouter);
-
-app.use(adminOnlyRouter);
+app.use('/api/health', healthRouter); // health check
+app.use('/api/auth', authRouter); // public login/register
+app.use('/api/protected', protectedRouter); // authenticated routes
+app.use('/api/admin', adminRouter); // admin‑specific features
+app.use('/api/users', usersRouter); // admin-only user management
 
 app.use(errorHandler);
 

@@ -98,13 +98,19 @@ npm run dev
 
 ## Environment Variables
 
+Copy the example file and update values:
+
 Create `backend/.env`:
 
-```env
-PORT=8000
-DATABASE_URL=postgresql://user:password@localhost:5432/ims
-JWT_SECRET=your_secret_here
+```bash
+cd backend
+cp .env.example .env
 ```
+
+Then edit backend/.env:
+
+- DATABASE_URL
+- JWT_SECRET
 
 ## Project Structure
 

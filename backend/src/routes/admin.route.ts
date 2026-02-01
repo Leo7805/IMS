@@ -4,7 +4,10 @@ import requireRole from '../middleware/requireRole.js';
 
 const router = Router();
 
-router.get('/api/admin-only', requireAuth, requireRole('admin'), (req, res) => {
+router.use(requireAuth);
+router.use(requireRole('admin'));
+
+router.get('/', (req, res) => {
   res.json({
     ok: true,
     message: 'Welcome, admin',
