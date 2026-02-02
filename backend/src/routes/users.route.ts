@@ -10,7 +10,7 @@ import {
 const router = Router();
 
 router.use(requireAuth);
-router.use(requireRole('admin'));
+router.use(requireRole('ADMIN'));
 
 router.get('/', listUsers);
 router.post('/', createStaff);

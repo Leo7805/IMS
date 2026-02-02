@@ -1,7 +1,13 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
+import prisma from '../db.js';
 
-const requireAuth = (req: Request, res: Response, next: NextFunction) => {
+interface AuthPayload {
+  id: string;
+  role: 'ADMIN' | 'STAFF';
+}
+
+const requireAuth = async (req: Request, res: Response, next: NextFunction) => {
   const authHeader = req.headers.authorization;
 
   if (!authHeader) {
@@ -20,8 +26,25 @@ const requireAuth = (req: Request, res: Response, next: NextFunction) => {
   }
 
   try {
-    const payload = jwt.verify(token, process.env.JWT_SECRET!);
-    (req as any).user = payload;
+    const payload = jwt.verify(token, process.env.JWT_SECRET!) as AuthPayload;
+
+    //
+    const user = await prisma.user.findUnique({
+      where: { id: payload.id },
+    });
+
+    if (!user) {
+      return res.status(401).json({
+        ok: false,
+        message: "User doesn't exist",
+      });
+    }
+
+    if (user.status !== 'ACTIVE') {
+      return res.status(403).json({ ok: false, message: 'Account disabled' });
+    }
+
+    (req as any).user = user;
     next();
   } catch (err) {
     return res.status(401).json({

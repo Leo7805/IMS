@@ -22,7 +22,7 @@ export const registerAuth = async (
     const { email, password, role } = req.body as {
       email?: string;
       password?: string;
-      role?: 'admin' | 'staff';
+      role?: 'ADMIN' | 'STAFF';
     };
 
     if (!email || !password) {
@@ -46,12 +46,13 @@ export const registerAuth = async (
       data: {
         email,
         passwordHash,
-        role: role ?? 'staff',
+        role: role ?? 'STAFF',
       },
       select: {
         id: true,
         email: true,
         role: true,
+        status: true,
         createdAt: true,
         updatedAt: true,
       },

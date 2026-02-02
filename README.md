@@ -67,7 +67,7 @@ It includes authentication (JWT + roles) and an Orders CRUD module with paginati
 
 ### Users (admin only)
 
-- `GET /users`
+- `GET /users` (list users)
 - `POST /users` (create staff)
 - `PATCH /users/:id` (update role/status)
 
@@ -131,7 +131,7 @@ frontend/
 
 - [x] Express server + /health
 - [x] Routes split + global error handler
-- [ ] Auth: register/login + JWT middleware
+- [x] Auth: register/login + JWT middleware
 - [ ] Orders: CRUD + pagination + filters
 - [ ] Admin: staff management
 - [ ] Frontend pages (login + orders)

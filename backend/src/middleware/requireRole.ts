@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 
-const requireRole = (role: 'admin' | 'staff') => {
+const requireRole = (role: 'ADMIN' | 'STAFF') => {
   return (req: Request, res: Response, next: NextFunction) => {
     const user = (req as any).user;
 

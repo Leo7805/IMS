@@ -5,7 +5,7 @@ import requireRole from '../middleware/requireRole.js';
 const router = Router();
 
 router.use(requireAuth);
-router.use(requireRole('admin'));
+router.use(requireRole('ADMIN'));
 
 router.get('/', (req, res) => {
   res.json({
