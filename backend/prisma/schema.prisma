@@ -24,11 +24,26 @@ enum UserStatus {
 }
 
 model User {
-  id           String   @id @default(cuid())
-  email        String   @unique
-  passwordHash String 
-  role         Role     @default(STAFF)
-  status       UserStatus @default(ACTIVE)
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  id              String   @id @default(cuid())
+  email           String   @unique
+  passwordHash    String 
+  role            Role     @default(STAFF)
+  status          UserStatus @default(ACTIVE)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  createdOrders   Order[] @relation("OrderCreatedBy")
+  assignedOrders  Order[] @relation("OrderAssignedTo")
+}
+
+model Order {
+  id              String @id @default(cuid())
+  title           String
+  description     String?
+  status          String @default("PENDING")
+  createdById     String 
+  createdBy       User @relation("OrderCreatedBy", fields: [createdById], references: [id])
+  assignedToId    String?
+  assignedTo      User? @relation("OrderAssignedTo", fields: [assignedToId], references: [id])
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 }

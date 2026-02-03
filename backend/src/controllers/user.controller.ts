@@ -64,7 +64,6 @@ const updateUser = async (
 ) => {
   try {
     const id = req.params.id;
-    console.log(id);
     const { role, status } = req.body as {
       role?: 'ADMIN' | 'STAFF';
       status?: 'ACTIVE' | 'DISABLED';
@@ -88,8 +87,6 @@ const updateUser = async (
         updatedAt: true,
       },
     });
-
-    console.log(`user: ${user}`);
 
     res.json({
       ok: true,
