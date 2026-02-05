@@ -1,8 +1,9 @@
 import { Request, Response, NextFunction } from 'express';
+import type { Role } from '@prisma/client';
 
-const requireRole = (role: 'ADMIN' | 'STAFF') => {
+const requireRole = (role: Role) => {
   return (req: Request, res: Response, next: NextFunction) => {
-    const user = (req as any).user;
+    const user = req.user;
 
     if (!user) {
       return res.status(401).json({

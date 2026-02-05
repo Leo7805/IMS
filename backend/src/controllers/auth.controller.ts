@@ -65,8 +65,7 @@ export const registerAuth = async (
 
     return res.status(201).json({
       ok: true,
-      user,
-      token,
+      data: { user, token },
     });
   } catch (err) {
     next(err);
@@ -117,10 +116,12 @@ export const loginAuth = async (
 
     return res.json({
       ok: true,
-      user: {
-        id: user.id,
-        email: user.email,
-        role: user.role,
+      data: {
+        user: {
+          id: user.id,
+          email: user.email,
+          role: user.role,
+        },
         token,
       },
     });

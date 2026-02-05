@@ -6,6 +6,8 @@ import adminRouter from './routes/admin.route.js';
 import usersRouter from './routes/users.route.js';
 import ordersRouter from './routes/orders.route.js';
 import errorHandler from './middleware/error.js';
+import requireAuth from './middleware/requireAuth.js';
+import requireRole from './middleware/requireRole.js';
 
 const app = express();
 
@@ -13,10 +15,10 @@ app.use(express.json());
 
 app.use('/api/health', healthRouter); // health check
 app.use('/api/auth', authRouter); // public login/register
-app.use('/api/protected', protectedRouter); // authenticated routes
-app.use('/api/admin', adminRouter); // admin‑specific features
-app.use('/api/users', usersRouter); // admin-only user management
-app.use('/api/orders', ordersRouter); // admin-only orders
+app.use('/api/protected', requireAuth, protectedRouter); // authenticated routes
+app.use('/api/admin', requireAuth, requireRole('ADMIN'), adminRouter); // admin‑specific features
+app.use('/api/users', requireAuth, requireRole('ADMIN'), usersRouter); // admin-only user management
+app.use('/api/orders', requireAuth, ordersRouter); // Orders Router
 
 app.use(errorHandler);
 

@@ -1,16 +1,16 @@
 import { Router } from 'express';
-import requireAuth from '../middleware/requireAuth.js';
-import requireRole from '../middleware/requireRole.js';
+// import requireAuth from '../middleware/requireAuth.js';
+// import requireRole from '../middleware/requireRole.js';
 import {
   listUsers,
   createStaff,
   updateUser,
-} from '../controllers/user.controller.js';
+} from '../controllers/users.controller.js';
 
 const router = Router();
 
-router.use(requireAuth);
-router.use(requireRole('ADMIN'));
+// router.use(requireAuth);
+// router.use(requireRole('ADMIN'));
 
 router.get('/', listUsers);
 router.post('/', createStaff);

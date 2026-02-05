@@ -1,19 +1,20 @@
 import { NextFunction, Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import prisma from '../db.js';
+import { Role } from '@prisma/client';
+import type { UserStatus } from '@prisma/client';
+import { userSelect } from '../selects/user.select.js';
 
 const listUsers = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const users = await prisma.user.findMany({
-      select: {
-        id: true,
-        email: true,
-        role: true,
-        createdAt: true,
-      },
+      select: userSelect,
     });
 
-    res.json(users);
+    res.json({
+      ok: true,
+      data: users,
+    });
     return;
   } catch (err) {
     next(err);
@@ -47,11 +48,14 @@ const createStaff = async (req: Request, res: Response, next: NextFunction) => {
       data: {
         email,
         passwordHash: hashed,
-        role: 'STAFF',
+        role: Role.STAFF,
       },
     });
 
-    return res.status(201).json(user);
+    return res.status(201).json({
+      ok: true,
+      data: user,
+    });
   } catch (err) {
     next(err);
   }
@@ -65,8 +69,8 @@ const updateUser = async (
   try {
     const id = req.params.id;
     const { role, status } = req.body as {
-      role?: 'ADMIN' | 'STAFF';
-      status?: 'ACTIVE' | 'DISABLED';
+      role?: Role;
+      status?: UserStatus;
     };
 
     if (!role && !status) {
@@ -79,13 +83,7 @@ const updateUser = async (
     const user = await prisma.user.update({
       where: { id },
       data: { role, status },
-      select: {
-        id: true,
-        email: true,
-        role: true,
-        status: true,
-        updatedAt: true,
-      },
+      select: userSelect,
     });
 
     res.json({

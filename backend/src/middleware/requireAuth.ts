@@ -1,11 +1,9 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import prisma from '../db.js';
+import { UserStatus } from '@prisma/client';
 
-interface AuthPayload {
-  id: string;
-  role: 'ADMIN' | 'STAFF';
-}
+type AuthPayload = Pick<Express.Request['user'], 'id' | 'role'>;
 
 const requireAuth = async (req: Request, res: Response, next: NextFunction) => {
   const authHeader = req.headers.authorization;
@@ -40,11 +38,11 @@ const requireAuth = async (req: Request, res: Response, next: NextFunction) => {
       });
     }
 
-    if (user.status !== 'ACTIVE') {
+    if (user.status !== UserStatus.ACTIVE) {
       return res.status(403).json({ ok: false, message: 'Account disabled' });
     }
 
-    (req as any).user = user;
+    req.user = user;
     next();
   } catch (err) {
     return res.status(401).json({
