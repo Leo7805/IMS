@@ -1,6 +1,6 @@
 # IMS Orders (Admin Dashboard)
 
-A minimal Inventory/Order Management System (IMS) built for job hunting.
+A minimal Inventory/Order Management System (IMS) .
 It includes authentication (JWT + roles) and an Orders CRUD module with pagination and filters.
 
 ## Tech Stack
@@ -11,7 +11,7 @@ It includes authentication (JWT + roles) and an Orders CRUD module with paginati
 - PostgreSQL
 - JWT Auth (admin / staff)
 - Validation: (TBD)
-- ORM: (TBD: Prisma or SQL)
+- ORM: (Prisma)
 
 **Frontend**
 
@@ -57,19 +57,171 @@ It includes authentication (JWT + roles) and an Orders CRUD module with paginati
 - `POST /auth/register`
 - `POST /auth/login`
 
+
+
+#### Login (sample)
+
+```http
+POST /auth/login
+Content-Type: application/json
+```
+
+```json
+{
+  "email": "admin@example.com",
+  "password": "password123"
+}
+```
+
+Response
+
+```json
+{
+  "ok": true,
+  "data": {
+    "user": {
+      "id": "cmla3v13r000010elbmbdu1vm",
+      "email": "admin@example.com",
+      "role": "STAFF"
+    },
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImNtbGEzdjEzcjAwMDAxMGVsYm1iZHUxdm0iLCJyb2xlIjoiU1RBRkYiLCJpYXQiOjE3NzAzMzUyMTgsImV4cCI6MTc3MDk0MDAxOH0.13Xd-pMohaj1MNUgeUVg2EQVtpXdIaMf6ghzrGrJxgQ"
+  }
+}
+```
+
+
+
+
+
 ### Orders
 
-- `POST /orders`
+- `POST /orders` (create order)
 - `GET /orders?page=1&pageSize=10&q=xxx`
 - `GET /orders/:id`
 - `PATCH /orders/:id`
 - `DELETE /orders/:id`
 
+
+
+#### Create order (sample)
+
+
+
+```http
+POST /orders
+Authorization: Bearer <token>
+Content-Type: application/json
+```
+
+```json
+{
+  "title": "Laptop repair",
+  "description": "Screen not turning on",
+  "assignedToId": "cmla3v13r000010elbmbdu1vm"
+}
+```
+
+Response
+
+```json
+{
+    "ok": true,
+    "data": {
+        "id": "cmla521ko0000l358nofm6p9y",
+        "title": "Laptop repair2",
+        "description": "Screen not turning on",
+        "status": "PENDING",
+        "createdById": "cml541cdf0000802wph66o6sh",
+        "assignedToId": "cml544x8y0002fj1glpx1uwzl",
+        "createdAt": "2026-02-06T00:19:54.361Z",
+        "updatedAt": "2026-02-06T00:19:54.361Z"
+    }
+}
+```
+
+
+
+#### List orders (sample)
+
+
+
+```http
+GET /orders?page=1&pageSize=10&q=laptop
+Authorization: Bearer <token>
+```
+
+Response
+
+
+
+```json
+{
+    "ok": true,
+    "data": {
+        "id": "cmla521ko0000l358nofm6p9y",
+        "title": "Laptop repair2",
+        "description": "Screen not turning on",
+        "status": "PENDING",
+        "createdById": "cml541cdf0000802wph66o6sh",
+        "assignedToId": "cml544x8y0002fj1glpx1uwzl",
+        "createdAt": "2026-02-06T00:19:54.361Z",
+        "updatedAt": "2026-02-06T00:19:54.361Z"
+    }
+}
+```
+
+
+
+ 
+
+
+
 ### Users (admin only)
 
 - `GET /users` (list users)
 - `POST /users` (create staff)
-- `PATCH /users/:id` (update role/status)
+- `PATCH /users/:id` (update role/status)																			
+
+
+
+#### Update user role/status (sample)
+
+
+
+```http
+PATCH /users/:id
+Authorization: Bearer <admin token>
+Content-Type: application/json
+```
+
+```json
+{
+  "role": "STAFF",
+  "status": "ACTIVE"
+}
+```
+
+Response
+
+```json
+{
+  "ok": true,
+  "data": {
+    "id": "user_456",
+    "email": "staff@example.com",
+    "role": "STAFF",
+    "status": "ACTIVE"
+  }
+}
+```
+
+
+
+
+
+
+
+
 
 ## Getting Started
 
@@ -119,10 +271,15 @@ backend/
   src/
     app.ts
     server.ts
+    db.ts
     routes/
     middleware/
     controllers/
     services/
+    selects/
+    policies/
+    types/
+    utils/
 frontend/
   src/
 ```

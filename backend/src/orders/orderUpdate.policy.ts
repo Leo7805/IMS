@@ -4,7 +4,7 @@ import { Role } from '@prisma/client';
 export const filterFields = (body: any, allowed: string[]) => {
   return Object.fromEntries(
     Object.entries(body).filter(
-      ([key, value]) => allowed.includes(key) && value,
+      ([key, value]) => allowed.includes(key) && value !== undefined,
     ),
   );
 };

@@ -3,6 +3,8 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import type { StringValue } from 'ms';
 import prisma from '../db.js';
+import { Role } from '@prisma/client';
+import { userSelect } from '../users/user.select.js';
 
 const signToken = (payload: object) => {
   const secret = process.env.JWT_SECRET;
@@ -22,7 +24,7 @@ export const registerAuth = async (
     const { email, password, role } = req.body as {
       email?: string;
       password?: string;
-      role?: 'ADMIN' | 'STAFF';
+      role?: Role;
     };
 
     if (!email || !password) {
@@ -46,16 +48,9 @@ export const registerAuth = async (
       data: {
         email,
         passwordHash,
-        role: role ?? 'STAFF',
+        role: role ?? Role.STAFF,
       },
-      select: {
-        id: true,
-        email: true,
-        role: true,
-        status: true,
-        createdAt: true,
-        updatedAt: true,
-      },
+      select: userSelect,
     });
 
     const token = signToken({

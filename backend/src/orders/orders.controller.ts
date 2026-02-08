@@ -1,7 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
 import prisma from '../db.js';
-import * as orderService from '../services/orders.service.js';
-import { pickAllowedFields } from '../policies/orderUpdate.policy.js';
+import * as orderService from '../orders/orders.service.js';
+import { pickAllowedFields } from './orderUpdate.policy.js';
+import { orderSelect } from './order.select.js';
 
 // Get order list (ADMIN or STAFF with assignedID), filter order in SQL
 export const getOrders = async (
@@ -12,7 +13,10 @@ export const getOrders = async (
   try {
     const { id: userId, role } = req.user;
     const orders = await orderService.getOrders(role, userId);
-    return res.json({ ok: true, data: orders });
+    return res.json({
+      ok: true,
+      data: orders,
+    });
   } catch (err) {
     next(err);
   }
@@ -34,12 +38,12 @@ export const getOrderById = async (
 
 // Update an order by id, (ADMIN or staff.id === order.assignedToId)
 export const updateOrder = async (
-  req: Request<{ id: string }>,
+  req: Request<{ orderId: string }>,
   res: Response,
   next: NextFunction,
 ) => {
   try {
-    const id = req.params.id; // order id
+    const id = req.params.orderId; // order id
     const { role } = req.user;
 
     const { allowedData, forbiddenFields } = pickAllowedFields(role, req.body);
@@ -64,44 +68,40 @@ export const updateOrder = async (
       ok: true,
       data: order,
     });
-  } catch (err) {
+  } catch (err: any) {
+    if (err.code === 'P2025') {
+      return res.status(404).json({
+        ok: false,
+        message: 'Order not found',
+      });
+    }
     next(err);
   }
 };
 
-// 🚩 Create order, Admin Only
+// Create order, Admin Only
 export const createOrder = async (
   req: Request,
   res: Response,
   next: NextFunction,
 ) => {
-  const { title, description, assignedToId } = req.body;
-  const { id: createdById } = (req as any).user;
-
-  if (!title) {
-    return res.status(400).json({
-      ok: false,
-      message: 'Title are required',
-    });
-  }
-
   try {
-    const data: any = {
+    const { title, description, assignedToId } = req.body;
+    const { id: createdById } = req.user;
+
+    if (!title) {
+      return res.status(400).json({
+        ok: false,
+        message: 'Title is required',
+      });
+    }
+
+    const order = await orderService.createOrder({
       title,
-      createdBy: {
-        connect: { id: createdById },
-      },
-    };
-
-    if (description !== undefined) {
-      data.description = description;
-    }
-
-    if (assignedToId) {
-      data.assignedTo = { connect: { id: assignedToId } };
-    }
-
-    const order = await prisma.order.create({ data });
+      createdById,
+      description,
+      assignedToId,
+    });
 
     res.status(201).json({
       ok: true,
@@ -113,32 +113,25 @@ export const createOrder = async (
 };
 
 export const deleteOrder = async (
-  req: Request<{ id: string }>,
+  req: Request<{ orderId: string }>,
   res: Response,
   next: NextFunction,
 ) => {
   try {
-    const id = req.params.id;
+    const id = req.params.orderId;
 
-    const deleted = await prisma.order.delete({
+    await prisma.order.delete({
       where: { id },
-      select: {
-        id: true,
-        title: true,
-        status: true,
-      },
     });
 
     return res.json({
       ok: true,
-      data: { deleted },
     });
   } catch (err: any) {
-    // user not found error
     if (err.code === 'P2025') {
       return res.status(404).json({
         ok: false,
-        message: 'User not found',
+        message: 'Order not found',
       });
     }
     next(err);

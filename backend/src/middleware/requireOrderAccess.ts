@@ -1,18 +1,18 @@
 import { Request, Response, NextFunction } from 'express';
 import prisma from '../db.js';
-import { orderSelect } from '../selects/order.select.js';
+import { orderSelect } from '../orders/order.select.js';
 import { Role } from '@prisma/client';
 
 // Check whether user's role is authorized for this user:
 // ADMIN or Staff.id === order.assignedToId
-const authorizeOrderAccess = async (
-  req: Request<{ id: string }>,
+const requireOrderAccess = async (
+  req: Request<{ orderId: string }>,
   res: Response,
   next: NextFunction,
 ) => {
   try {
     const { id: userId, role } = req.user;
-    const { id: orderId } = req.params;
+    const { orderId } = req.params;
 
     // Find out the order
     const order = await prisma.order.findUnique({
@@ -43,4 +43,4 @@ const authorizeOrderAccess = async (
   }
 };
 
-export default authorizeOrderAccess;
+export default requireOrderAccess;

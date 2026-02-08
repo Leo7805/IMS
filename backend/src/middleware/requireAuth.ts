@@ -26,7 +26,6 @@ const requireAuth = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const payload = jwt.verify(token, process.env.JWT_SECRET!) as AuthPayload;
 
-    //
     const user = await prisma.user.findUnique({
       where: { id: payload.id },
     });

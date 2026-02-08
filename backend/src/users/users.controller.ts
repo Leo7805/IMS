@@ -3,9 +3,13 @@ import bcrypt from 'bcrypt';
 import prisma from '../db.js';
 import { Role } from '@prisma/client';
 import type { UserStatus } from '@prisma/client';
-import { userSelect } from '../selects/user.select.js';
+import { userSelect } from './user.select.js';
 
-const listUsers = async (req: Request, res: Response, next: NextFunction) => {
+export const listUsers = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const users = await prisma.user.findMany({
       select: userSelect,
@@ -21,17 +25,21 @@ const listUsers = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-const createStaff = async (req: Request, res: Response, next: NextFunction) => {
-  const { email, password } = req.body;
-
-  if (!email || !password) {
-    return res.status(400).json({
-      ok: false,
-      message: 'Email and password required',
-    });
-  }
-
+export const createStaff = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res.status(400).json({
+        ok: false,
+        message: 'Email and password required',
+      });
+    }
+
     // Check duplicate
     const existing = await prisma.user.findUnique({ where: { email } });
     if (existing) {
@@ -50,6 +58,7 @@ const createStaff = async (req: Request, res: Response, next: NextFunction) => {
         passwordHash: hashed,
         role: Role.STAFF,
       },
+      select: userSelect,
     });
 
     return res.status(201).json({
@@ -61,7 +70,7 @@ const createStaff = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-const updateUser = async (
+export const updateUser = async (
   req: Request<{ id: string }>,
   res: Response,
   next: NextFunction,
@@ -94,5 +103,3 @@ const updateUser = async (
     next(err);
   }
 };
-
-export { listUsers, createStaff, updateUser };

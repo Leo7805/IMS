@@ -1,10 +1,8 @@
 import express from 'express';
-import healthRouter from './routes/health.route.js';
-import authRouter from './routes/auth.route.js';
-import protectedRouter from './routes/protected.route.js';
-import adminRouter from './routes/admin.route.js';
-import usersRouter from './routes/users.route.js';
-import ordersRouter from './routes/orders.route.js';
+import healthRouter from './health/health.route.js';
+import authRouter from './auth/auth.route.js';
+import usersRouter from './users/users.route.js';
+import ordersRouter from './orders/orders.route.js';
 import errorHandler from './middleware/error.js';
 import requireAuth from './middleware/requireAuth.js';
 import requireRole from './middleware/requireRole.js';
@@ -15,8 +13,6 @@ app.use(express.json());
 
 app.use('/api/health', healthRouter); // health check
 app.use('/api/auth', authRouter); // public login/register
-app.use('/api/protected', requireAuth, protectedRouter); // authenticated routes
-app.use('/api/admin', requireAuth, requireRole('ADMIN'), adminRouter); // admin‑specific features
 app.use('/api/users', requireAuth, requireRole('ADMIN'), usersRouter); // admin-only user management
 app.use('/api/orders', requireAuth, ordersRouter); // Orders Router
 

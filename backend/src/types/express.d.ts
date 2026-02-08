@@ -1,5 +1,5 @@
 import type { Role } from '@prisma/client';
-import type { OrderSelected } from '../selects/order.select.js';
+import type { OrderSelected } from '../orders/order.select.js';
 
 declare global {
   namespace Express {
