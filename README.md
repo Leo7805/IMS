@@ -51,6 +51,36 @@ npm install
 
 
 
+### Migrate + seed the database
+
+```bash
+npm run prisma:migrate
+npx prisma db seed
+```
+
+
+
+### Run the backend (dev)
+
+```bash
+npm run dev
+```
+
+
+
+### Sample login credentials
+After running `npx prisma db seed`:
+
+- Admin  
+  - Email: admin@example.com  
+  - Password: Admin123!
+
+- Staff  
+  - Email: staff@example.com  
+  - Password: Staff123!
+
+
+
 ## Features
 
 ### Auth & Roles
@@ -58,6 +88,7 @@ npm install
 - Register / Login
 - JWT-based authentication
 - Role-based access control: `admin`, `staff`
+
 
 ### Orders Module (Main)
 
@@ -77,6 +108,8 @@ npm install
 - Unified error response
 - Audit fields: `created_at`, `updated_at`
 - `.env` configuration
+
+
 
 ## API Endpoints (WIP)
 
