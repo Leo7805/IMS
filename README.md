@@ -1,7 +1,7 @@
-# IMS Orders (Admin Dashboard)
+# Order Management System (IMS)
 
-A minimal Inventory/Order Management System (IMS) .
-It includes authentication (JWT + roles) and an Orders CRUD module with pagination and filters.
+A minimal Inventory/Order Management System (IMS). Includes JWT authentication (admin/staff), Orders CRUD with pagination/search, and Order Items.
+
 
 ## Tech Stack
 
@@ -11,13 +11,45 @@ It includes authentication (JWT + roles) and an Orders CRUD module with paginati
 - PostgreSQL
 - JWT Auth (admin / staff)
 - Validation: zod
-- ORM: (Prisma)
+- ORM: Prisma
 
 **Frontend**
 
-- React + TypeScript
-- Vite
-- API client: fetch/axios
+- React + TypeScript (Vite)
+
+
+## Quick Start
+
+### Prerequisites
+- Node.js: v22.19.0
+- PostgreSQL: running locally
+
+### Environment variables
+Create a `.env` file in the backend root (same folder as `package.json`).
+
+You can start from `.env.example`:
+
+```bash
+cp .env.example .env
+```
+
+Required keys (example):
+
+```env
+DATABASE_URL="postgresql://leo@localhost:5432/ims"
+JWT_SECRET="pawword000"
+JWT_EXPIRES_IN=7d
+PORT=8000
+NODE_ENV=development
+```
+
+### Install dependencies
+
+```bash
+npm install
+```
+
+
 
 ## Features
 
@@ -352,7 +384,7 @@ frontend/
 - [x] Routes split + global error handler
 - [x] Auth: register/login + JWT middleware
 - [ ] Orders: CRUD + pagination + filters
-- [ ] Admin: staff management
+- [x] Admin: staff management
 - [ ] Frontend pages (login + orders)
 - [ ] Deploy
 
