@@ -10,7 +10,7 @@ It includes authentication (JWT + roles) and an Orders CRUD module with paginati
 - Node.js + Express + TypeScript
 - PostgreSQL
 - JWT Auth (admin / staff)
-- Validation: (TBD)
+- Validation: zod
 - ORM: (Prisma)
 
 **Frontend**
@@ -90,6 +90,12 @@ Response
 ```
 
 
+
+### Users (admin only)
+
+- `GET /users` (list users)
+- `POST /users` (create staff)
+- `PATCH /users/:id` (update role/status)		
 
 
 
@@ -176,12 +182,6 @@ Response
 
 
 
-### Users (admin only)
-
-- `GET /users` (list users)
-- `POST /users` (create staff)
-- `PATCH /users/:id` (update role/status)																			
-
 
 
 #### Update user role/status (sample)
@@ -217,7 +217,69 @@ Response
 
 
 
+### Order Items
 
+- `POST /orders/:orderId/items` (create order item)
+- `GET /orders/:orderId/items`
+- `GET /orders/:orderId/items/:itemId`
+- `PATCH /orders/:orderId/items/:itemId`
+- `DELETE /orders/:orderId/items/:itemId`
+
+
+
+#### Update order item (sample)
+
+```http
+PATCH /orders/:orderId/items/:itemId
+Authorization: Bearer <token>
+Content-Type: application/json
+```
+
+```json
+{
+  "quantity": 2,
+  "notes": "Customer requested two screens"
+}
+```
+
+
+
+Response
+
+```json
+{
+  "ok": true,
+  "data": {
+    "id": "cmlb123abc0001xyzitem01",
+    "orderId": "cmla521ko0000l358nofm6p9y",
+    "name": "Screen replacement",
+    "quantity": 2,
+    "unitPrice": "299.99",
+    "notes": "Customer requested two screens",
+    "createdAt": "2026-02-06T01:10:21.123Z",
+    "updatedAt": "2026-02-06T01:10:21.123Z"
+  }
+}
+```
+
+
+
+
+
+#### Delete order item (sample)
+
+```http
+DELETE /orders/:orderId/items/:itemId
+Authorization: Bearer <token>
+```
+
+Response
+
+```json
+{
+  "ok": true,
+}
+```
 
 
 

@@ -1,10 +1,12 @@
 import prisma from '../db.js';
+import { AppError } from '../errors/appError.js';
 import { orderItemSelect } from './orderItems.select.js';
 import { Prisma } from '@prisma/client';
+import { UpdatableItemFields } from './orderItemUpdate.policy.js';
 
-export const getOrderItem = async (orderId: string) => {
+export const getOrderItems = async (orderId: string) => {
   return await prisma.orderItem.findMany({
-    where: { id: orderId },
+    where: { orderId },
     select: orderItemSelect,
   });
 };
@@ -34,4 +36,44 @@ export const createOrderItem = async ({
     data,
     select: orderItemSelect,
   });
+};
+
+export const updateOrderItem = async ({
+  itemId,
+  itemData,
+}: {
+  itemId: string;
+  itemData: UpdatableItemFields;
+}) => {
+  try {
+    return await prisma.orderItem.update({
+      where: { id: itemId },
+      data: itemData,
+      select: orderItemSelect,
+    });
+  } catch (err: unknown) {
+    if (err instanceof Prisma.PrismaClientKnownRequestError) {
+      if (err.code === 'P2025') {
+        throw new AppError(404, 'Order item not found');
+      }
+    }
+
+    throw err;
+  }
+};
+
+export const deleteOrderItem = async (itemId: string) => {
+  try {
+    return await prisma.orderItem.delete({
+      where: { id: itemId },
+    });
+  } catch (err: unknown) {
+    if (err instanceof Prisma.PrismaClientKnownRequestError) {
+      if (err.code === 'P2025') {
+        throw new AppError(404, 'Order item not found');
+      }
+    }
+
+    throw err;
+  }
 };
