@@ -1,7 +1,6 @@
 import { Router } from 'express';
-// import requireAuth from '../middleware/requireAuth.js';
-import requireRole from '../middleware/requireRole.js';
-import requireOrderAccess from '../middleware/requireOrderAccess.js';
+import { requireRole } from '../auth/index.js';
+import { requireOrderAccess } from './requireOrderAccess.js';
 import {
   getOrders,
   createOrder,

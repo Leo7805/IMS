@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import type { Role } from '@prisma/client';
 
-const requireRole = (role: Role) => {
+export const requireRole = (role: Role) => {
   return (req: Request, res: Response, next: NextFunction) => {
     const user = req.user;
 
@@ -22,5 +22,3 @@ const requireRole = (role: Role) => {
     next();
   };
 };
-
-export default requireRole;

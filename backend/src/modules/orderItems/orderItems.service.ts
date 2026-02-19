@@ -1,8 +1,9 @@
-import prisma from '../db.js';
-import { AppError } from '../errors/appError.js';
+import prisma from '@/db.js';
+import { AppError } from '@/error/appError.js';
 import { orderItemSelect } from './orderItems.select.js';
 import { Prisma } from '@prisma/client';
 import { UpdatableItemFields } from './orderItemUpdate.policy.js';
+import { CreateItemServiceSchema } from './orderItems.schema.js';
 
 export const getOrderItems = async (orderId: string) => {
   return await prisma.orderItem.findMany({
@@ -17,13 +18,7 @@ export const createOrderItem = async ({
   quantity,
   unitPrice,
   notes,
-}: {
-  orderId: string;
-  name: string;
-  quantity: number;
-  unitPrice: Prisma.Decimal;
-  notes?: string;
-}) => {
+}: CreateItemServiceSchema) => {
   const data = {
     order: { connect: { id: orderId } },
     name,

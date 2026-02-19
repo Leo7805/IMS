@@ -1,6 +1,7 @@
 import type { Request, Response, NextFunction } from 'express';
 import { Prisma } from '@prisma/client';
-import { AppError } from '../errors/appError.js';
+import { AppError } from './appError.js';
+import { z } from 'zod';
 
 export default function errorHandler(
   err: unknown,
@@ -12,6 +13,16 @@ export default function errorHandler(
     return res.status(err.statusCode).json({
       ok: false,
       message: err.message,
+    });
+  }
+
+  if (err instanceof z.ZodError) {
+    return res.status(422).json({
+      ok: false,
+      message: err.issues.map((issue) => ({
+        field: issue.path.join('.'),
+        message: issue.message,
+      })),
     });
   }
 

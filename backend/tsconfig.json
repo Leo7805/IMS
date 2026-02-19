@@ -3,6 +3,11 @@
     "rootDir": "./src",
     "outDir": "./dist",
 
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    },
+
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
     "target": "ES2022",

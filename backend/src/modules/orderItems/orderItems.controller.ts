@@ -1,11 +1,16 @@
-import { Request, Response, NextFunction } from 'express';
-import * as orderItemService from './orderItem.service.js';
+import { Request, Response } from 'express';
+import * as orderItemService from './orderItems.service.js';
 import { pickAllowedFields } from './orderItemUpdate.policy.js';
-import Prisma from '@prisma/client';
-import { AppError } from '../errors/appError.js';
+import { AppError } from '@/error/appError.js';
+import { orderParamsSchema } from '../orders/orders.schema.js';
+import {
+  orderItemParamsSchema,
+  createItemSchema,
+} from './orderItems.schema.js';
+import { loginUserSchema } from '../auth/auth.schema.js';
 
 export const getOrderItems = async (req: Request, res: Response) => {
-  const orderId = req.params.orderId as string;
+  const { orderId } = orderParamsSchema.parse(req.params);
 
   const orderItem = await orderItemService.getOrderItems(orderId);
 
@@ -15,17 +20,10 @@ export const getOrderItems = async (req: Request, res: Response) => {
   });
 };
 
+// 🚩
 export const createOrderItem = async (req: Request, res: Response) => {
-  const orderId = req.params.orderId as string;
-  const { name, quantity, unitPrice, notes } = req.body;
-
-  if (!name) {
-    throw new AppError(400, 'Name is required');
-  }
-
-  if (typeof quantity !== 'number' || quantity <= 0) {
-    throw new AppError(400, 'Quantity must be a positive number');
-  }
+  const { orderId } = orderParamsSchema.parse(req.params);
+  const { name, quantity, unitPrice, notes } = createItemSchema.parse(req.body);
 
   const orderItem = await orderItemService.createOrderItem({
     orderId,
@@ -41,10 +39,9 @@ export const createOrderItem = async (req: Request, res: Response) => {
   });
 };
 
-// 🚩
 export const updateOrderItem = async (req: Request, res: Response) => {
-  const itemId = req.params.itemId as string;
-  const { id: userId, role } = req.user;
+  const { itemId } = orderItemParamsSchema.parse(req.params);
+  const { id: userId, role } = loginUserSchema.parse(req.user);
   const { allowedData, forbiddenFields } = pickAllowedFields(role, req.body);
 
   if (forbiddenFields.length > 0) {
@@ -70,7 +67,7 @@ export const updateOrderItem = async (req: Request, res: Response) => {
 };
 
 export const deleteOrderItem = async (req: Request, res: Response) => {
-  const itemId = req.params.itemId as string;
+  const { itemId } = orderItemParamsSchema.parse(req.params);
 
   await orderItemService.deleteOrderItem(itemId);
 
