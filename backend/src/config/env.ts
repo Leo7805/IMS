@@ -15,10 +15,10 @@ const envSchema = z.object({
     .string()
     .min(6, 'JWT_SECRET must be at least 10 characters long'),
 
-  // JWT_EXPIRES_IN: z
-  //   .string()
-  //   .regex(/^\d+(ms|s|m|h|d)$/, 'Invalid expiresIn format')
-  //   .default('7d'),
+  JWT_EXPIRES_IN: z
+    .string()
+    .regex(/^\d+(ms|s|m|h|d)$/, 'Invalid expiresIn format')
+    .default('7d'),
   SWAGGER_ENABLED: z.string().optional(),
 });
 
