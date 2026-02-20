@@ -1,7 +1,7 @@
 import prisma from '@/db.js';
 import { AppError } from '@/error/appError.js';
 import { orderItemSelect } from './orderItems.select.js';
-import { Prisma } from '@prisma/client';
+import { Prisma } from '@/generated/prisma/client.js';
 import { UpdatableItemFields } from './orderItemUpdate.policy.js';
 import { CreateItemServiceSchema } from './orderItems.schema.js';
 

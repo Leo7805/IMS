@@ -8,7 +8,7 @@ import {
   updateOrder,
   deleteOrder,
 } from './orders.controller.js';
-import { Role } from '@prisma/client';
+import { Role } from '@/generated/prisma/client.js';
 import orderItemsRouter from '../orderItems/orderItems.route.js';
 
 const router = Router();

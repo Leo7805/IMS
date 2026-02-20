@@ -1,4 +1,4 @@
-import { Role } from '@prisma/client';
+import { Role } from '@/generated/prisma/client.js';
 
 export type UpdatableItemFields = {
   name?: string;

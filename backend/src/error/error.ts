@@ -1,5 +1,6 @@
 import type { Request, Response, NextFunction } from 'express';
-import { Prisma } from '@prisma/client';
+import { Prisma } from '@/generated/prisma/client.js';
+// import { Prisma } from '@prisma/client';
 import { AppError } from './appError.js';
 import { z } from 'zod';
 

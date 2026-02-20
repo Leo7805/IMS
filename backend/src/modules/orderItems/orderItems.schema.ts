@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import { orderIdSchema, itemIdSchema } from '@/schemas/shared.params.js';
-import { Prisma } from '@prisma/client';
+import { Prisma } from '@/generated/prisma/client.js';
 
 export const orderItemParamsSchema = z.object({
   orderId: orderIdSchema,

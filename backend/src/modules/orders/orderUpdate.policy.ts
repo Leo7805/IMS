@@ -1,4 +1,4 @@
-import { Role } from '@prisma/client';
+import { Role } from '@/generated/prisma/client.js';
 
 // Filter in fields of record needed to update
 export const filterFields = (body: any, allowed: string[]) => {

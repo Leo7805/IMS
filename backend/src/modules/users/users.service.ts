@@ -3,7 +3,7 @@ import { userSelect } from './user.select.js';
 import prisma from '@/db.js';
 import { CreateStaff, UpdateUserService } from './users.schema.js';
 import { AppError } from '@/error/appError.js';
-import { Role } from '@prisma/client';
+import { Role } from '@/generated/prisma/client.js';
 
 export const listUsers = async () => {
   return prisma.user.findMany({

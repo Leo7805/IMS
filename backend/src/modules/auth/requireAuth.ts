@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import prisma from '../../db.js';
-import { UserStatus } from '@prisma/client';
+import { UserStatus } from '@/generated/prisma/client.js';
 import { jwtPayloadSchema } from './auth.schema.js';
 import { env } from '@/config/env.js';
 import { z } from 'zod';

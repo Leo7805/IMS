@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import type { Role } from '@prisma/client';
+import type { Role } from '@/generated/prisma/client.js';
 
 export const requireRole = (role: Role) => {
   return (req: Request, res: Response, next: NextFunction) => {

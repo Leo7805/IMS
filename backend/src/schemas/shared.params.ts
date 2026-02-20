@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { Role } from '@prisma/client';
+import { Role } from '@/generated/prisma/client.js';
 
 export const userIdSchema = z.cuid('Invalid user ID format');
 export const emailSchema = z.email('Email are required!');

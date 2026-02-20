@@ -1,6 +1,6 @@
 import prisma from '@/db.js';
 import { orderSelect } from './orders.select.js';
-import { Role, Prisma } from '@prisma/client';
+import { Role, Prisma } from '@/generated/prisma/client.js';
 import { LoginUser } from '../auth/auth.schema.js';
 import { AppError } from '@/error/appError.js';
 import { OrderId } from '@/schemas/shared.params.js';

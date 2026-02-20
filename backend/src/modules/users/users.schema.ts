@@ -5,7 +5,7 @@ import {
   passwordSchema,
   roleSchema,
 } from '@/schemas/shared.params.js';
-import { UserStatus } from '@prisma/client';
+import { UserStatus } from '@/generated/prisma/client.js';
 
 export const userStatusSchema = z.enum(UserStatus);
 

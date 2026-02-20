@@ -1,4 +1,4 @@
-import type { Role } from '@prisma/client';
+import type { Role } from '@/generated/prisma/client.js';
 import type { OrderSelected } from '../orders/orders.select.ts';
 
 declare global {

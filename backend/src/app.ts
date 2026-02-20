@@ -5,7 +5,7 @@ import usersRouter from './modules/users/users.route.js';
 import ordersRouter from './modules/orders/orders.route.js';
 import errorHandler from './error/error.js';
 import { requireAuth, requireRole } from './modules/auth/index.js';
-import { Role } from '@prisma/client';
+import { Role } from '@/generated/prisma/client.js';
 
 const app = express();
 

@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import prisma from '@/db.js';
 import { orderSelect } from './orders.select.js';
-import { Role } from '@prisma/client';
+import { Role } from '@/generated/prisma/client.js';
 import { orderParamsSchema } from './orders.schema.js';
 import { loginUserSchema } from '../auth/auth.schema.js';
 import { AppError } from '@/error/appError.js';
