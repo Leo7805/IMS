@@ -50,7 +50,15 @@ export default function errorHandler(
     }
   }
 
-  res.status(500).json({
+  console.error('❌ Unhandled error:', err);
+
+  if (err instanceof Error) {
+    console.error('STACK TRACE:\n', err.stack);
+  } else {
+    console.error('NON-ERROR THROWN:\n', JSON.stringify(err, null, 2));
+  }
+
+  return res.status(500).json({
     ok: false,
     message: 'Internal Server Error',
   });
