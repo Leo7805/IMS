@@ -5,21 +5,19 @@ const envSchema = z.object({
     .enum(['development', 'test', 'production'])
     .default('development'),
 
-  PORT: z
-    .string()
-    .default('8000')
-    .transform((val) => Number(val)),
+  PORT: z.coerce.number().default(8000),
 
   DATABASE_URL: z.url(),
 
   JWT_SECRET: z
     .string()
-    .min(10, 'JWT_SECRET must be at least 10 characters long'),
+    .min(6, 'JWT_SECRET must be at least 10 characters long'),
 
-  JWT_EXPIRES_IN: z
-    .string()
-    .regex(/^\d+(ms|s|m|h|d)$/, 'Invalid expiresIn format')
-    .default('7d'),
+  // JWT_EXPIRES_IN: z
+  //   .string()
+  //   .regex(/^\d+(ms|s|m|h|d)$/, 'Invalid expiresIn format')
+  //   .default('7d'),
+  SWAGGER_ENABLED: z.string().optional(),
 });
 
 const parsed = envSchema.safeParse(process.env);
