@@ -9,6 +9,8 @@ const envSchema = z.object({
 
   DATABASE_URL: z.url(),
 
+  DIRECT_URL: z.url(),
+
   JWT_SECRET: z
     .string()
     .min(6, 'JWT_SECRET must be at least 10 characters long'),
