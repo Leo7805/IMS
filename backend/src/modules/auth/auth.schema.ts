@@ -6,14 +6,6 @@ import {
   roleSchema,
 } from '@/schemas/shared.params.js';
 
-export const registerAuthSchema = z
-  .object({
-    email: emailSchema,
-    password: passwordSchema,
-    role: roleSchema.optional(),
-  })
-  .strict();
-
 export const loginAuthSchema = z
   .object({
     email: emailSchema,
@@ -26,6 +18,14 @@ export const loginUserSchema = z.object({
   role: roleSchema,
 });
 
+export const registerAuthReqSchema = loginAuthSchema.extend({
+  adminSecret: z.string().min(6).optional(),
+});
+
+export const registerAuthServSchema = loginAuthSchema.extend({
+  role: roleSchema,
+});
+
 export const jwtPayloadUserSchema = loginUserSchema.strict();
 
 export const jwtPayloadSchema = jwtPayloadUserSchema.extend({
@@ -33,7 +33,7 @@ export const jwtPayloadSchema = jwtPayloadUserSchema.extend({
   exp: z.number().int().positive(),
 });
 
-export type RegisterAuth = z.infer<typeof registerAuthSchema>;
+export type RegisterAuthServ = z.infer<typeof registerAuthServSchema>;
 export type LoginAuth = z.infer<typeof loginAuthSchema>;
 export type JwtPayload = z.infer<typeof jwtPayloadSchema>;
 export type JwtPayloadUser = z.infer<typeof jwtPayloadUserSchema>;

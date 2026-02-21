@@ -1,10 +1,18 @@
 import { Request, Response } from 'express';
-import { registerAuthSchema, loginAuthSchema } from './auth.schema.js';
+import { registerAuthReqSchema, loginAuthSchema } from './auth.schema.js';
 import * as authService from './auth.service.js';
+import { env } from '@/config/env.js';
+import { Role } from '@/generated/prisma/client.js';
 
 // New user registeration controller
 export const registerAuth = async (req: Request, res: Response) => {
-  const { email, password, role } = registerAuthSchema.parse(req.body);
+  const { email, password, adminSecret } = registerAuthReqSchema.parse(
+    req.body,
+  );
+
+  // Register as a Admin or Staff
+  const role =
+    adminSecret === env.ADMIN_BOOTSTRAP_SECRET ? Role.ADMIN : Role.STAFF;
 
   const data = await authService.registerAuth({ email, password, role });
 

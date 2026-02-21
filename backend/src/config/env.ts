@@ -13,13 +13,17 @@ const envSchema = z.object({
 
   JWT_SECRET: z
     .string()
-    .min(6, 'JWT_SECRET must be at least 10 characters long'),
+    .min(6, 'JWT_SECRET must be at least 6 characters long'),
 
   JWT_EXPIRES_IN: z
     .string()
     .regex(/^\d+(ms|s|m|h|d)$/, 'Invalid expiresIn format')
     .default('7d'),
   SWAGGER_ENABLED: z.string().optional(),
+
+  ADMIN_BOOTSTRAP_SECRET: z
+    .string()
+    .min(6, 'ADMIN_BOOTSTRAP_SECRET must be at least 6 characters long'),
 });
 
 const parsed = envSchema.safeParse(process.env);

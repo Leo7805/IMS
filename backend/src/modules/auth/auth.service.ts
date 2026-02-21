@@ -4,7 +4,11 @@ import { Prisma, Role } from '@/generated/prisma/client.js';
 import prisma from '@/db.js';
 import { AppError } from '@/error/appError.js';
 import { userSelect } from '../users/user.select.js';
-import type { RegisterAuth, LoginAuth, JwtPayloadUser } from './auth.schema.js';
+import type {
+  RegisterAuthServ,
+  LoginAuth,
+  JwtPayloadUser,
+} from './auth.schema.js';
 import { env } from '@/config/env.js';
 
 // Sign the token for a user
@@ -15,7 +19,11 @@ const signToken = (payload: JwtPayloadUser) => {
 };
 
 // Register service
-export const registerAuth = async ({ email, password, role }: RegisterAuth) => {
+export const registerAuth = async ({
+  email,
+  password,
+  role,
+}: RegisterAuthServ) => {
   try {
     const passwordHash = await bcrypt.hash(password, 10);
 
