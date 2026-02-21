@@ -1,22 +1,18 @@
 import { Request, Response, NextFunction } from 'express';
 import type { Role } from '@/generated/prisma/client.js';
+import { AppError } from '@/error/appError.js';
+import { loginUserSchema } from './auth.schema.js';
 
 export const requireRole = (role: Role) => {
   return (req: Request, res: Response, next: NextFunction) => {
-    const user = req.user;
+    const user = loginUserSchema.parse(req.user);
 
-    if (!user) {
-      return res.status(401).json({
-        ok: false,
-        message: 'Not authenticated',
-      });
-    }
+    // if (!user) {
+    //   throw new AppError(401, 'Unauthorized');
+    // }
 
     if (user.role !== role) {
-      return res.status(403).json({
-        ok: false,
-        message: 'Forbidden: insufficient permission',
-      });
+      throw new AppError(403, 'Forbidden: insufficient permissioin');
     }
 
     next();

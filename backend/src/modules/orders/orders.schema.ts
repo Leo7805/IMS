@@ -10,5 +10,5 @@ export const orderTitleSchema = z.string().trim().min(1, 'Invalid title!');
 export const createOrderSchema = z.object({
   title: orderTitleSchema,
   description: orderTitleSchema,
-  assignedToId: userIdSchema,
+  assignedToId: userIdSchema.optional(),
 });

@@ -10,7 +10,7 @@ import { AppError } from '@/error/appError.js';
 // Authorization using jwt token
 export const requireAuth = async (
   req: Request,
-  res: Response,
+  _res: Response,
   next: NextFunction,
 ) => {
   const authHeader = req.headers.authorization;
