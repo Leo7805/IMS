@@ -1,358 +1,83 @@
-# Order Management System (IMS)
+# Order & Inventory Management System (IMS)
 
-A minimal Inventory/Order Management System (IMS). Includes JWT authentication (admin/staff), Orders CRUD with pagination/search, and Order Items.
+A backend system for managing orders and related items, designed to simulate day-to-day operational workflows such as task assignment, status tracking, and itemised order processing for small to medium-sized business environments.
 
+The system provides authenticated APIs for managing orders and staff responsibilities, with role-based access control to separate administrative and operational users.
 
-## Tech Stack
+---
+
+## 🔗 Interactive API Documentation
+
+Interactive Swagger UI is available for exploring nested order and order item APIs:
+
+👉 https://ims-fpq2.onrender.com/docs
+
+This allows frontend or QA teams to explore endpoints, request schemas, and authentication flows directly via an interactive interface.
+
+---
+
+## 🚀 Deployed Backend API
+
+The backend service is deployed and accessible at:
+
+👉 https://ims-fpq2.onrender.com
+
+---
+
+## ✨ Key Features
+
+### Authentication & Roles
+
+- JWT-based authentication
+- Role-based access control (Admin / Staff)
+- Secure protected endpoints
+
+### Orders Module
+
+- Create / update / delete orders
+- Status tracking
+- Pagination and search support
+
+### Order Items Module
+
+- Nested item management under each order
+- Add / update / remove individual order items
+- Quantity and pricing control per item
+
+### Admin Module
+
+- Manage staff user roles
+- Update user status
+
+### System Design
+
+- Input validation (Zod)
+- Unified error response structure
+- Audit fields: `createdAt`, `updatedAt`
+- Modular controller/service architecture
+- Environment-based configuration
+
+---
+
+## 🧰 Tech Stack
 
 **Backend**
 
 - Node.js + Express + TypeScript
 - PostgreSQL
-- JWT Auth (admin / staff)
-- Validation: zod
-- ORM: Prisma
+- Prisma ORM
+- Zod Validation
+- JWT Authentication
 
-**Frontend**
+**Frontend (WIP)**
 
 - React + TypeScript (Vite)
 
+---
 
-## Quick Start
+## 🛠 Local Development
 
-### Prerequisites
-- Node.js: v22.19.0
-- PostgreSQL: running locally
-
-### Environment variables
-Create a `.env` file in the backend root (same folder as `package.json`).
-
-You can start from `.env.example`:
-
-```bash
-cp .env.example .env
-```
-
-Required keys (example):
-
-```env
-DATABASE_URL="postgresql://leo@localhost:5432/ims"
-JWT_SECRET="pawword000"
-JWT_EXPIRES_IN=7d
-PORT=8000
-NODE_ENV=development
-```
-
-### Install dependencies
-
-```bash
-npm install
-```
-
-
-
-### Migrate + seed the database
-
-```bash
-npm run prisma:migrate
-npx prisma db seed
-```
-
-
-
-### Run the backend (dev)
-
-```bash
-npm run dev
-```
-
-
-
-### Sample login credentials
-After running `npx prisma db seed`:
-
-- Admin  
-  - Email: admin@example.com  
-  - Password: Admin123!
-
-- Staff  
-  - Email: staff@example.com  
-  - Password: Staff123!
-
-
-
-## Features
-
-### Auth & Roles
-
-- Register / Login
-- JWT-based authentication
-- Role-based access control: `admin`, `staff`
-
-
-### Orders Module (Main)
-
-- Create order
-- List orders (pagination)
-- Update order
-- Delete order
-- Search / filter
-
-### Admin Module (Support)
-
-- Admin can manage staff users
-
-### System
-
-- Input validation
-- Unified error response
-- Audit fields: `created_at`, `updated_at`
-- `.env` configuration
-
-
-
-## API Endpoints (WIP)
-
-### Health
-
-- `GET /health`
-
-### Auth
-
-- `POST /auth/register`
-- `POST /auth/login`
-
-
-
-#### Login (sample)
-
-```http
-POST /auth/login
-Content-Type: application/json
-```
-
-```json
-{
-  "email": "admin@example.com",
-  "password": "password123"
-}
-```
-
-Response
-
-```json
-{
-  "ok": true,
-  "data": {
-    "user": {
-      "id": "cmla3v13r000010elbmbdu1vm",
-      "email": "admin@example.com",
-      "role": "STAFF"
-    },
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImNtbGEzdjEzcjAwMDAxMGVsYm1iZHUxdm0iLCJyb2xlIjoiU1RBRkYiLCJpYXQiOjE3NzAzMzUyMTgsImV4cCI6MTc3MDk0MDAxOH0.13Xd-pMohaj1MNUgeUVg2EQVtpXdIaMf6ghzrGrJxgQ"
-  }
-}
-```
-
-
-
-### Users (admin only)
-
-- `GET /users` (list users)
-- `POST /users` (create staff)
-- `PATCH /users/:id` (update role/status)		
-
-
-
-### Orders
-
-- `POST /orders` (create order)
-- `GET /orders?page=1&pageSize=10&q=xxx`
-- `GET /orders/:id`
-- `PATCH /orders/:id`
-- `DELETE /orders/:id`
-
-
-
-#### Create order (sample)
-
-
-
-```http
-POST /orders
-Authorization: Bearer <token>
-Content-Type: application/json
-```
-
-```json
-{
-  "title": "Laptop repair",
-  "description": "Screen not turning on",
-  "assignedToId": "cmla3v13r000010elbmbdu1vm"
-}
-```
-
-Response
-
-```json
-{
-    "ok": true,
-    "data": {
-        "id": "cmla521ko0000l358nofm6p9y",
-        "title": "Laptop repair2",
-        "description": "Screen not turning on",
-        "status": "PENDING",
-        "createdById": "cml541cdf0000802wph66o6sh",
-        "assignedToId": "cml544x8y0002fj1glpx1uwzl",
-        "createdAt": "2026-02-06T00:19:54.361Z",
-        "updatedAt": "2026-02-06T00:19:54.361Z"
-    }
-}
-```
-
-
-
-#### List orders (sample)
-
-
-
-```http
-GET /orders?page=1&pageSize=10&q=laptop
-Authorization: Bearer <token>
-```
-
-Response
-
-
-
-```json
-{
-    "ok": true,
-    "data": {
-        "id": "cmla521ko0000l358nofm6p9y",
-        "title": "Laptop repair2",
-        "description": "Screen not turning on",
-        "status": "PENDING",
-        "createdById": "cml541cdf0000802wph66o6sh",
-        "assignedToId": "cml544x8y0002fj1glpx1uwzl",
-        "createdAt": "2026-02-06T00:19:54.361Z",
-        "updatedAt": "2026-02-06T00:19:54.361Z"
-    }
-}
-```
-
-
-
- 
-
-
-
-
-
-#### Update user role/status (sample)
-
-
-
-```http
-PATCH /users/:id
-Authorization: Bearer <admin token>
-Content-Type: application/json
-```
-
-```json
-{
-  "role": "STAFF",
-  "status": "ACTIVE"
-}
-```
-
-Response
-
-```json
-{
-  "ok": true,
-  "data": {
-    "id": "user_456",
-    "email": "staff@example.com",
-    "role": "STAFF",
-    "status": "ACTIVE"
-  }
-}
-```
-
-
-
-### Order Items
-
-- `POST /orders/:orderId/items` (create order item)
-- `GET /orders/:orderId/items`
-- `GET /orders/:orderId/items/:itemId`
-- `PATCH /orders/:orderId/items/:itemId`
-- `DELETE /orders/:orderId/items/:itemId`
-
-
-
-#### Update order item (sample)
-
-```http
-PATCH /orders/:orderId/items/:itemId
-Authorization: Bearer <token>
-Content-Type: application/json
-```
-
-```json
-{
-  "quantity": 2,
-  "notes": "Customer requested two screens"
-}
-```
-
-
-
-Response
-
-```json
-{
-  "ok": true,
-  "data": {
-    "id": "cmlb123abc0001xyzitem01",
-    "orderId": "cmla521ko0000l358nofm6p9y",
-    "name": "Screen replacement",
-    "quantity": 2,
-    "unitPrice": "299.99",
-    "notes": "Customer requested two screens",
-    "createdAt": "2026-02-06T01:10:21.123Z",
-    "updatedAt": "2026-02-06T01:10:21.123Z"
-  }
-}
-```
-
-
-
-
-
-#### Delete order item (sample)
-
-```http
-DELETE /orders/:orderId/items/:itemId
-Authorization: Bearer <token>
-```
-
-Response
-
-```json
-{
-  "ok": true,
-}
-```
-
-
-
-
-
-## Getting Started
-
-### 1) Backend setup
+Clone the repository and run locally if needed:
 
 ```bash
 cd backend
@@ -361,66 +86,26 @@ cp .env.example .env
 npm run dev
 ```
 
-Test:
+Test health endpoint:
 
 ```bash
 curl http://localhost:8000/health
 ```
 
-### 2) Frontend setup
+---
 
-```bash
-cd frontend
-npm install
-npm run dev
-```
+## 📌 Roadmap
 
-## Environment Variables
+- [x] Auth: Register/Login + JWT middleware
+- [x] Orders: CRUD
+- [x] Admin: Staff management
+- [x] Swagger API documentation
+- [x] Backend deployment
+- [ ] Frontend pages
+- [ ] Advanced filtering
 
-Copy the example file and update values:
+---
 
-Create `backend/.env`:
-
-```bash
-cd backend
-cp .env.example .env
-```
-
-Then edit backend/.env:
-
-- DATABASE_URL
-- JWT_SECRET
-
-## Project Structure
-
-```txt
-backend/
-  src/
-    app.ts
-    server.ts
-    db.ts
-    routes/
-    middleware/
-    controllers/
-    services/
-    selects/
-    policies/
-    types/
-    utils/
-frontend/
-  src/
-```
-
-## Roadmap
-
-- [x] Express server + /health
-- [x] Routes split + global error handler
-- [x] Auth: register/login + JWT middleware
-- [ ] Orders: CRUD + pagination + filters
-- [x] Admin: staff management
-- [ ] Frontend pages (login + orders)
-- [ ] Deploy
-
-## License
+## 📄 License
 
 MIT
