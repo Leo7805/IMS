@@ -1,0 +1,88 @@
+responses:
+  InternalServerError:
+    description: Internal Server Error
+    content:
+      application/json:
+        schema:
+          allOf:
+            - $ref: './schemas.yaml#/schemas/ApiError'
+            - type: object
+              properties:
+                message:
+                  type: string
+                  example: Internal Server Error
+  UnauthorizedError:
+    description: Unauthorized
+    content:
+      application/json:
+        schema:
+          $ref: './schemas.yaml#/schemas/ApiError'
+        examples:
+          unauthorized:
+            value:
+              ok: false
+              message: Unauthorized
+
+  ForbiddenError:
+    description: Forbidden
+    content:
+      application/json:
+        schema:
+          $ref: './schemas.yaml#/schemas/ApiError'
+        examples:
+          forbidden:
+            value:
+              ok: false
+              message: 'Forbidden: insufficient permission'
+
+  OrderNotFoundError:
+    description: Not Found
+    content:
+      application/json:
+        schema:
+          $ref: './schemas.yaml#/schemas/ApiError'
+        examples:
+          orderNotFound:
+            value:
+              ok: false
+              message: Order not found
+
+  OrdersValidationError:
+    description: Validation Error
+    content:
+      application/json:
+        schema:
+          $ref: './schemas/orders.yaml#/schemas/OrdersValidationError'
+        examples:
+          invalidOrderId:
+            value:
+              ok: false
+              message:
+                - field: orderId
+                  message: Invalid order ID format
+
+  OrderItemNotFoundError:
+    description: Not Found
+    content:
+      application/json:
+        schema:
+          $ref: './schemas.yaml#/schemas/ApiError'
+        examples:
+          orderItemNotFound:
+            value:
+              ok: false
+              message: Order item not found
+
+  OrderItemsValidationError:
+    description: Validation Error
+    content:
+      application/json:
+        schema:
+          $ref: './schemas/orderItems.yaml#/schemas/OrderItemsValidationError'
+        examples:
+          invalidItemId:
+            value:
+              ok: false
+              message:
+                - field: itemId
+                  message: Invalid iterm ID format

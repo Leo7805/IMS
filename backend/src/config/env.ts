@@ -19,7 +19,7 @@ const envSchema = z.object({
     .string()
     .regex(/^\d+(ms|s|m|h|d)$/, 'Invalid expiresIn format')
     .default('7d'),
-  SWAGGER_ENABLED: z.string().optional(),
+  SWAGGER_ENABLED: z.enum(['true', 'false']).optional(),
 
   ADMIN_BOOTSTRAP_SECRET: z
     .string()

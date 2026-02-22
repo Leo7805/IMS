@@ -1,0 +1,154 @@
+orderItems:
+  get:
+    operationId: getOrderItems
+    tags: [OrderItems]
+    summary: Get items by order
+    parameters:
+      - name: orderId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Order ID (CUID)
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/orderItems.yaml#/schemas/OrderItemsListResponse'
+      '401':
+        $ref: '../components/responses.yaml#/responses/UnauthorizedError'
+      '403':
+        $ref: '../components/responses.yaml#/responses/ForbiddenError'
+      '404':
+        $ref: '../components/responses.yaml#/responses/OrderNotFoundError'
+      '422':
+        $ref: '../components/responses.yaml#/responses/OrderItemsValidationError'
+      '500':
+        $ref: '../components/responses.yaml#/responses/InternalServerError'
+
+  post:
+    operationId: createOrderItem
+    tags: [OrderItems]
+    summary: Create item in order
+    parameters:
+      - name: orderId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Order ID (CUID)
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/orderItems.yaml#/schemas/CreateOrderItemRequest'
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/orderItems.yaml#/schemas/OrderItemResponse'
+      '401':
+        $ref: '../components/responses.yaml#/responses/UnauthorizedError'
+      '403':
+        $ref: '../components/responses.yaml#/responses/ForbiddenError'
+      '404':
+        $ref: '../components/responses.yaml#/responses/OrderNotFoundError'
+      '422':
+        $ref: '../components/responses.yaml#/responses/OrderItemsValidationError'
+      '500':
+        $ref: '../components/responses.yaml#/responses/InternalServerError'
+
+orderItemById:
+  patch:
+    operationId: updateOrderItem
+    tags: [OrderItems]
+    summary: Update order item
+    parameters:
+      - name: orderId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: itemId
+        in: path
+        required: true
+        schema:
+          type: string
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/orderItems.yaml#/schemas/UpdateOrderItemRequest'
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/orderItems.yaml#/schemas/OrderItemResponse'
+      '400':
+        description: Bad Request
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '../components/schemas.yaml#/schemas/ApiError'
+                - type: object
+                  properties:
+                    message:
+                      type: string
+                      example: Nothing to update
+      '401':
+        $ref: '../components/responses.yaml#/responses/UnauthorizedError'
+      '403':
+        $ref: '../components/responses.yaml#/responses/ForbiddenError'
+      '404':
+        $ref: '../components/responses.yaml#/responses/OrderItemNotFoundError'
+      '422':
+        $ref: '../components/responses.yaml#/responses/OrderItemsValidationError'
+      '500':
+        $ref: '../components/responses.yaml#/responses/InternalServerError'
+
+  delete:
+    operationId: deleteOrderItem
+    tags: [OrderItems]
+    summary: Delete order item
+    parameters:
+      - name: orderId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: itemId
+        in: path
+        required: true
+        schema:
+          type: string
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [ok]
+              properties:
+                ok:
+                  type: boolean
+                  example: true
+      '401':
+        $ref: '../components/responses.yaml#/responses/UnauthorizedError'
+      '403':
+        $ref: '../components/responses.yaml#/responses/ForbiddenError'
+      '404':
+        $ref: '../components/responses.yaml#/responses/OrderItemNotFoundError'
+      '422':
+        $ref: '../components/responses.yaml#/responses/OrderItemsValidationError'
+      '500':
+        $ref: '../components/responses.yaml#/responses/InternalServerError'

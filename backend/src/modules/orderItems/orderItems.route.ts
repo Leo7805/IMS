@@ -8,8 +8,6 @@ import {
 
 const router = Router({ mergeParams: true });
 
-// router.use(requireOrderAccess);
-
 router.get('/', getOrderItems);
 router.post('/', createOrderItem);
 router.patch('/:itemId', updateOrderItem);

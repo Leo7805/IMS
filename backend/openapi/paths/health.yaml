@@ -1,0 +1,20 @@
+health:
+  get:
+    operationId: getHealth
+    tags: [Health]
+    summary: Health (Public)
+    description: Public endpoint. No bearer token required.
+    security: [] # public route override
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '../components/schemas.yaml#/schemas/ApiSuccess'
+                - type: object
+                  properties:
+                    data:
+                      type: string
+                      example: API running

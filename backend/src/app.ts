@@ -1,20 +1,27 @@
 import express from 'express';
-import healthRouter from './modules/health/health.route.js';
-import authRouter from './modules/auth/auth.route.js';
-import usersRouter from './modules/users/users.route.js';
-import ordersRouter from './modules/orders/orders.route.js';
-import errorHandler from './error/error.js';
-import { requireAuth, requireRole } from './modules/auth/index.js';
-import { Role } from '@/generated/prisma/client.js';
+import errorHandler from '@/error/error.js';
+import swaggerUi from 'swagger-ui-express';
+import { swaggerSpec } from '@/config/swagger.js';
+import { env } from '@/config/env.js';
+import apiRouter from '@/routes/apiRouter.js';
 
 const app = express();
 
+if (env.SWAGGER_ENABLED === 'true') {
+  app.use(
+    '/docs',
+    swaggerUi.serve,
+    swaggerUi.setup(swaggerSpec, {
+      swaggerOptions: {
+        displayOperationId: false,
+      },
+    }),
+  );
+}
+
 app.use(express.json());
 
-app.use('/api/health', healthRouter); // health check
-app.use('/api/auth', authRouter); // public login/register
-app.use('/api/users', requireAuth, requireRole(Role.ADMIN), usersRouter); // admin-only user management
-app.use('/api/orders', requireAuth, ordersRouter); // Orders Router
+app.use('/api', apiRouter);
 
 app.use(errorHandler);
 

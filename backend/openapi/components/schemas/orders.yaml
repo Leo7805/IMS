@@ -1,0 +1,113 @@
+schemas:
+  Order:
+    type: object
+    required: [id, title, status, createdById, createdAt, updatedAt]
+    properties:
+      id:
+        type: string
+        example: cmlvp74gc0002e9m6jqqsmhln
+      title:
+        type: string
+        example: Replace warehouse lights
+      description:
+        type: string
+        nullable: true
+        example: Replace all broken bulbs in section A
+      status:
+        type: string
+        example: PENDING
+      createdById:
+        type: string
+        example: cmlvp74gc0002e9m6jqqsmhln
+      assignedToId:
+        type: string
+        nullable: true
+        example: cmlvp74gc0003e9m6abcsdefg
+      createdAt:
+        type: string
+        format: date-time
+      updatedAt:
+        type: string
+        format: date-time
+
+  OrderListResponse:
+    allOf:
+      - $ref: '../schemas.yaml#/schemas/ApiSuccess'
+      - type: object
+        properties:
+          data:
+            type: array
+            items:
+              $ref: '#/schemas/Order'
+
+  OrderResponse:
+    allOf:
+      - $ref: '../schemas.yaml#/schemas/ApiSuccess'
+      - type: object
+        properties:
+          data:
+            $ref: '#/schemas/Order'
+
+  CreateOrderRequest:
+    type: object
+    additionalProperties: false
+    required: [title, description]
+    properties:
+      title:
+        type: string
+        minLength: 1
+        example: Replace warehouse lights
+      description:
+        type: string
+        minLength: 1
+        example: Replace all broken bulbs in section A
+      assignedToId:
+        type: string
+        example: cmlvp74gc0003e9m6abcsdefg
+
+  UpdateOrderRequest:
+    type: object
+    additionalProperties: false
+    properties:
+      title:
+        type: string
+        minLength: 1
+        example: Replace warehouse lights - urgent
+      description:
+        type: string
+        minLength: 1
+        example: Need to finish before Friday
+      status:
+        type: string
+        example: IN_PROGRESS
+      assignedToId:
+        type: string
+        example: cmlvp74gc0003e9m6abcsdefg
+    anyOf:
+      - required: [title]
+      - required: [description]
+      - required: [status]
+      - required: [assignedToId]
+
+  OrdersValidationIssue:
+    type: object
+    required: [field, message]
+    properties:
+      field:
+        type: string
+        example: orderId
+      message:
+        type: string
+        example: Invalid order ID format
+
+  OrdersValidationError:
+    type: object
+    required: [ok, message]
+    properties:
+      ok:
+        type: boolean
+        example: false
+      message:
+        type: array
+        items:
+          $ref: '#/schemas/OrdersValidationIssue'

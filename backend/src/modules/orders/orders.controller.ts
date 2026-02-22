@@ -6,7 +6,6 @@ import { orderIdSchema } from '@/schemas/shared.params.js';
 import { AppError } from '@/error/appError.js';
 import { createOrderSchema } from './orders.schema.js';
 
-// Get order list (ADMIN or STAFF with assignedID), filter order in SQL
 export const getOrders = async (req: Request, res: Response) => {
   const { id: userId, role } = loginUserSchema.parse(req.user);
   const orders = await orderService.getOrders({ role, id: userId });

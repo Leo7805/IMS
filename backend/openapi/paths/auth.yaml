@@ -1,0 +1,98 @@
+login:
+  post:
+    operationId: loginAuth
+    tags: [Auth]
+    summary: Login (Public)
+    description: Public endpoint. No bearer token required.
+    security: []
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/auth.yaml#/schemas/LoginRequest'
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/auth.yaml#/schemas/LoginResponse'
+      '401':
+        description: Unauthorized
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '../components/schemas.yaml#/schemas/ApiError'
+                - type: object
+                  properties:
+                    message:
+                      type: string
+                      example: Invalid credentials
+      '422':
+        description: Validation Error
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/auth.yaml#/schemas/ValidationErrorResponse'
+      '500':
+        $ref: '../components/responses.yaml#/responses/InternalServerError'
+
+register:
+  post:
+    operationId: registerAuth
+    tags: [Auth]
+    summary: Register User (Staff/Admin)
+    description: |
+      Public endpoint.
+      - Without `adminSecret` (or invalid `adminSecret`): creates STAFF
+      - With valid `adminSecret`: creates ADMIN
+    security: []
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            oneOf:
+              - $ref: '../components/schemas/auth.yaml#/schemas/RegisterStaffRequest'
+              - $ref: '../components/schemas/auth.yaml#/schemas/RegisterAdminRequest'
+          examples:
+            staff:
+              summary: Staff registration
+              value:
+                email: staff@example.com
+                password: Passw0rd!
+            admin:
+              summary: Admin registration
+              value:
+                email: admin@example.com
+                password: Passw0rd!
+                adminSecret: admin007
+    responses:
+      '201':
+        description: Created
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/auth.yaml#/schemas/LoginResponse'
+      '409':
+        description: Conflict
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '../components/schemas.yaml#/schemas/ApiError'
+                - type: object
+                  properties:
+                    message:
+                      type: string
+                      example: Email already registered
+      '422':
+        description: Validation Error
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/auth.yaml#/schemas/ValidationErrorResponse'
+      '500':
+        $ref: '../components/responses.yaml#/responses/InternalServerError'

@@ -1,0 +1,157 @@
+orders:
+  get:
+    operationId: getOrders
+    tags: [Orders]
+    summary: Get orders
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/orders.yaml#/schemas/OrderListResponse'
+      '401':
+        $ref: '../components/responses.yaml#/responses/UnauthorizedError'
+      '403':
+        $ref: '../components/responses.yaml#/responses/ForbiddenError'
+      '500':
+        $ref: '../components/responses.yaml#/responses/InternalServerError'
+
+  post:
+    operationId: createOrder
+    tags: [Orders]
+    summary: Create order (Admin only)
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/orders.yaml#/schemas/CreateOrderRequest'
+    responses:
+      '201':
+        description: Created
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/orders.yaml#/schemas/OrderResponse'
+      '401':
+        $ref: '../components/responses.yaml#/responses/UnauthorizedError'
+      '403':
+        $ref: '../components/responses.yaml#/responses/ForbiddenError'
+      '404':
+        $ref: '../components/responses.yaml#/responses/OrderNotFoundError'
+      '422':
+        $ref: '../components/responses.yaml#/responses/OrdersValidationError'
+      '500':
+        $ref: '../components/responses.yaml#/responses/InternalServerError'
+
+orderById:
+  get:
+    operationId: getOrderById
+    tags: [Orders]
+    summary: Get order by ID
+    parameters:
+      - name: orderId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Order ID (CUID)
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/orders.yaml#/schemas/OrderResponse'
+      '401':
+        $ref: '../components/responses.yaml#/responses/UnauthorizedError'
+      '403':
+        $ref: '../components/responses.yaml#/responses/ForbiddenError'
+      '404':
+        $ref: '../components/responses.yaml#/responses/OrderNotFoundError'
+      '422':
+        $ref: '../components/responses.yaml#/responses/OrdersValidationError'
+      '500':
+        $ref: '../components/responses.yaml#/responses/InternalServerError'
+
+  patch:
+    operationId: updateOrder
+    tags: [Orders]
+    summary: Update order
+    parameters:
+      - name: orderId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Order ID (CUID)
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/orders.yaml#/schemas/UpdateOrderRequest'
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/orders.yaml#/schemas/OrderResponse'
+      '400':
+        description: Bad Request
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '../components/schemas.yaml#/schemas/ApiError'
+                - type: object
+                  properties:
+                    message:
+                      type: string
+                      example: Nothing to update
+      '401':
+        $ref: '../components/responses.yaml#/responses/UnauthorizedError'
+      '403':
+        $ref: '../components/responses.yaml#/responses/ForbiddenError'
+      '404':
+        $ref: '../components/responses.yaml#/responses/OrderNotFoundError'
+      '422':
+        $ref: '../components/responses.yaml#/responses/OrdersValidationError'
+      '500':
+        $ref: '../components/responses.yaml#/responses/InternalServerError'
+
+  delete:
+    operationId: deleteOrder
+    tags: [Orders]
+    summary: Delete order (Admin only)
+    parameters:
+      - name: orderId
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Order ID (CUID)
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [ok]
+              properties:
+                ok:
+                  type: boolean
+                  example: true
+      '401':
+        $ref: '../components/responses.yaml#/responses/UnauthorizedError'
+      '403':
+        $ref: '../components/responses.yaml#/responses/ForbiddenError'
+      '404':
+        $ref: '../components/responses.yaml#/responses/OrderNotFoundError'
+      '422':
+        $ref: '../components/responses.yaml#/responses/OrdersValidationError'
+      '500':
+        $ref: '../components/responses.yaml#/responses/InternalServerError'

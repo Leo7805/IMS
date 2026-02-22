@@ -1,0 +1,97 @@
+schemas:
+  User:
+    type: object
+    required: [id, email, role, status, createdAt, updatedAt]
+    properties:
+      id:
+        type: string
+        example: cmlvp74gc0002e9m6jqqsmhln
+      email:
+        type: string
+        format: email
+        example: staff@example.com
+      role:
+        type: string
+        enum: [ADMIN, STAFF]
+        example: STAFF
+      status:
+        type: string
+        enum: [ACTIVE, DISABLED]
+        example: ACTIVE
+      createdAt:
+        type: string
+        format: date-time
+      updatedAt:
+        type: string
+        format: date-time
+
+  UsersListResponse:
+    allOf:
+      - $ref: '../schemas.yaml#/schemas/ApiSuccess'
+      - type: object
+        properties:
+          data:
+            type: array
+            items:
+              $ref: '#/schemas/User'
+
+  UserResponse:
+    allOf:
+      - $ref: '../schemas.yaml#/schemas/ApiSuccess'
+      - type: object
+        properties:
+          data:
+            $ref: '#/schemas/User'
+
+  CreateStaffRequest:
+    type: object
+    additionalProperties: false
+    required: [email, password]
+    properties:
+      email:
+        type: string
+        format: email
+        example: staff@example.com
+      password:
+        type: string
+        minLength: 6
+        example: Passw0rd!
+
+  UpdateUserRequest:
+    type: object
+    additionalProperties: false
+    properties:
+      role:
+        type: string
+        enum: [ADMIN, STAFF]
+        example: STAFF
+      status:
+        type: string
+        enum: [ACTIVE, DISABLED]
+        example: ACTIVE
+    anyOf:
+      - required: [role]
+      - required: [status]
+
+  UsersValidationIssue:
+    type: object
+    required: [field, message]
+    properties:
+      field:
+        type: string
+        example: id
+      message:
+        type: string
+        example: Invalid user ID format
+
+  UsersValidationErrorResponse:
+    type: object
+    required: [ok, message]
+    properties:
+      ok:
+        type: boolean
+        example: false
+      message:
+        type: array
+        items:
+          $ref: '#/schemas/UsersValidationIssue'

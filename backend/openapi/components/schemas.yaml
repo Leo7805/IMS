@@ -1,0 +1,24 @@
+schemas:
+  ApiSuccess:
+    type: object
+    required: [ok, data]
+    properties:
+      ok:
+        type: boolean
+        example: true
+      data: {}
+  ApiError:
+    type: object
+    required: [ok, message]
+    properties:
+      ok: { type: boolean, example: false }
+      message: { type: string }
+  LoginResponse:
+    allOf:
+      - $ref: '#/schemas/ApiSuccess'
+      - type: object
+        properties:
+          data:
+            type: object
+            properties:
+              token: { type: string }

@@ -1,0 +1,54 @@
+openapi: 3.0.3
+info:
+  title: IMS API
+  version: 1.0.0
+  description: IMS backend API documentation
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+servers:
+  - url: /api
+
+components:
+  schemas:
+    $ref: './components/schemas.yaml#/schemas'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+security:
+  - bearerAuth: []
+
+tags:
+  - name: Health
+    description: Health check endpoints
+  - name: Auth
+    description: Authentication endpoints
+  - name: Users
+    description: User management endpoints
+  - name: Orders
+    description: Order management endpoints
+  - name: OrderItems
+    description: Order item endpoints
+
+paths:
+  /health:
+    $ref: './paths/health.yaml#/health'
+  /auth/login:
+    $ref: './paths/auth.yaml#/login'
+  /auth/register:
+    $ref: './paths/auth.yaml#/register'
+  /users:
+    $ref: './paths/users.yaml#/users'
+  /users/{id}:
+    $ref: './paths/users.yaml#/userById'
+  /orders:
+    $ref: './paths/orders.yaml#/orders'
+  /orders/{orderId}:
+    $ref: './paths/orders.yaml#/orderById'
+  /orders/{orderId}/items:
+    $ref: './paths/orderItems.yaml#/orderItems'
+  /orders/{orderId}/items/{itemId}:
+    $ref: './paths/orderItems.yaml#/orderItemById'

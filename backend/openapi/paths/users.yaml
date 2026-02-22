@@ -1,0 +1,134 @@
+users:
+  get:
+    operationId: listUsers
+    tags: [Users]
+    summary: List users
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/users.yaml#/schemas/UsersListResponse'
+      '401':
+        description: Unauthorized
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas.yaml#/schemas/ApiError'
+      '403':
+        description: Forbidden
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas.yaml#/schemas/ApiError'
+      '500':
+        $ref: '../components/responses.yaml#/responses/InternalServerError'
+
+  post:
+    operationId: createStaff
+    tags: [Users]
+    summary: Create staff user
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/users.yaml#/schemas/CreateStaffRequest'
+    responses:
+      '201':
+        description: Created
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/users.yaml#/schemas/UserResponse'
+      '401':
+        description: Unauthorized
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas.yaml#/schemas/ApiError'
+      '403':
+        description: Forbidden
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas.yaml#/schemas/ApiError'
+      '409':
+        description: Conflict
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '../components/schemas.yaml#/schemas/ApiError'
+                - type: object
+                  properties:
+                    message:
+                      type: string
+                      example: Email already exists
+      '422':
+        description: Validation Error
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/users.yaml#/schemas/UsersValidationErrorResponse'
+      '500':
+        $ref: '../components/responses.yaml#/responses/InternalServerError'
+
+userById:
+  patch:
+    operationId: updateUser
+    tags: [Users]
+    summary: Update user role or status
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: User ID (CUID)
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../components/schemas/users.yaml#/schemas/UpdateUserRequest'
+    responses:
+      '200':
+        description: OK
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/users.yaml#/schemas/UserResponse'
+      '401':
+        description: Unauthorized
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas.yaml#/schemas/ApiError'
+      '403':
+        description: Forbidden
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas.yaml#/schemas/ApiError'
+      '404':
+        description: Not Found
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '../components/schemas.yaml#/schemas/ApiError'
+                - type: object
+                  properties:
+                    message:
+                      type: string
+                      example: Resource not found
+      '422':
+        description: Validation Error
+        content:
+          application/json:
+            schema:
+              $ref: '../components/schemas/users.yaml#/schemas/UsersValidationErrorResponse'
+      '500':
+        $ref: '../components/responses.yaml#/responses/InternalServerError'

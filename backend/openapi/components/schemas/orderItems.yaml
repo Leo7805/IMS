@@ -1,0 +1,118 @@
+schemas:
+  OrderItem:
+    type: object
+    required: [id, orderId, name, quantity, unitPrice, createdAt, updatedAt]
+    properties:
+      id:
+        type: string
+        example: cmlw2v3ab0001e9abcde12345
+      orderId:
+        type: string
+        example: cmlvp74gc0002e9m6jqqsmhln
+      name:
+        type: string
+        example: LED Bulb
+      quantity:
+        type: integer
+        minimum: 0
+        example: 10
+      unitPrice:
+        type: string
+        example: '12.50'
+      notes:
+        type: string
+        nullable: true
+        example: urgent
+      createdAt:
+        type: string
+        format: date-time
+      updatedAt:
+        type: string
+        format: date-time
+
+  OrderItemsListResponse:
+    allOf:
+      - $ref: '../schemas.yaml#/schemas/ApiSuccess'
+      - type: object
+        properties:
+          data:
+            type: array
+            items:
+              $ref: '#/schemas/OrderItem'
+
+  OrderItemResponse:
+    allOf:
+      - $ref: '../schemas.yaml#/schemas/ApiSuccess'
+      - type: object
+        properties:
+          data:
+            $ref: '#/schemas/OrderItem'
+
+  CreateOrderItemRequest:
+    type: object
+    additionalProperties: false
+    required: [name, quantity, unitPrice]
+    properties:
+      name:
+        type: string
+        minLength: 1
+        example: LED Bulb
+      quantity:
+        type: integer
+        minimum: 0
+        example: 10
+      unitPrice:
+        type: string
+        pattern: '^\d+(\.\d{1,2})?$'
+        example: '12.50'
+      notes:
+        type: string
+        example: urgent
+
+  UpdateOrderItemRequest:
+    type: object
+    additionalProperties: false
+    properties:
+      name:
+        type: string
+        minLength: 1
+        example: LED Bulb PRO
+      quantity:
+        type: integer
+        minimum: 0
+        example: 12
+      unitPrice:
+        type: string
+        pattern: '^\d+(\.\d{1,2})?$'
+        example: '13.00'
+      notes:
+        type: string
+        example: updated notes
+    anyOf:
+      - required: [name]
+      - required: [quantity]
+      - required: [unitPrice]
+      - required: [notes]
+
+  OrderItemsValidationIssue:
+    type: object
+    required: [field, message]
+    properties:
+      field:
+        type: string
+        example: itemId
+      message:
+        type: string
+        example: Invalid iterm ID format
+
+  OrderItemsValidationError:
+    type: object
+    required: [ok, message]
+    properties:
+      ok:
+        type: boolean
+        example: false
+      message:
+        type: array
+        items:
+          $ref: '#/schemas/OrderItemsValidationIssue'

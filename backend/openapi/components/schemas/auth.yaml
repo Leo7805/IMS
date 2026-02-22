@@ -1,0 +1,113 @@
+schemas:
+  LoginRequest:
+    type: object
+    required: [email, password]
+    properties:
+      email:
+        type: string
+        format: email
+        example: leo@example.com
+      password:
+        type: string
+        minLength: 6
+        example: pass1234
+
+  LoginUser:
+    type: object
+    required: [id, email, role]
+    properties:
+      id:
+        type: string
+        example: cmlvp74gc0002e9m6jqqsmhln
+      email:
+        type: string
+        format: email
+        example: leo0@qq.com
+      role:
+        type: string
+        example: ADMIN
+
+  LoginData:
+    type: object
+    required: [user, token]
+    properties:
+      user:
+        $ref: '#/schemas/LoginUser'
+      token:
+        type: string
+        example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+
+  LoginResponse:
+    allOf:
+      - $ref: '../schemas.yaml#/schemas/ApiSuccess'
+      - type: object
+        properties:
+          data:
+            $ref: '#/schemas/LoginData'
+
+  LoginValidationErrorResponse:
+    type: object
+    required: [ok, message]
+    properties:
+      ok:
+        type: boolean
+        example: false
+      message:
+        type: array
+        items:
+          $ref: '#/schemas/ValidationIssue'
+
+  RegisterStaffRequest:
+    type: object
+    additionalProperties: false
+    required: [email, password]
+    properties:
+      email:
+        type: string
+        format: email
+        example: admin@example.com
+      password:
+        type: string
+        minLength: 6
+        example: Passw0rd!
+
+  RegisterAdminRequest:
+    type: object
+    additionalProperties: false
+    required: [email, password, adminSecret]
+    properties:
+      email:
+        type: string
+        format: email
+        example: admin@example.com
+      password:
+        type: string
+        minLength: 6
+        example: Passw0rd!
+      adminSecret:
+        type: string
+        minLength: 6
+        example: admin007
+
+  ValidationIssue:
+    type: object
+    required: [field, message]
+    properties:
+      field:
+        type: string
+        example: password
+      message:
+        type: string
+        example: Password must be at least 6 characters
+
+  ValidationErrorResponse:
+    type: object
+    required: [ok, message]
+    properties:
+      ok:
+        type: boolean
+        example: false
+      message:
+        type: array
+        items:
+          $ref: '#/schemas/ValidationIssue'

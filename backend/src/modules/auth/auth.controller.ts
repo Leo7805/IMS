@@ -4,7 +4,6 @@ import * as authService from './auth.service.js';
 import { env } from '@/config/env.js';
 import { Role } from '@/generated/prisma/client.js';
 
-// New user registeration controller
 export const registerAuth = async (req: Request, res: Response) => {
   const { email, password, adminSecret } = registerAuthReqSchema.parse(
     req.body,

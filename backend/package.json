@@ -4,8 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "predev": "npm run openapi:bundle",
     "dev": "tsx watch src/server.ts",
     "debug": "tsx watch --inspect src/server.ts",
+    "prebuild": "npm run openapi:bundle",
     "build": "tsc && tsc-alias",
     "start": "node dist/server.js",
     "prisma:generate": "prisma generate",
@@ -16,7 +18,9 @@
     "format": "prettier . --check",
     "format:fix": "prettier . --write",
     "check": "npm run lint && npm run format",
-    "check:fix": "npm run lint:fix && npm run format:fix"
+    "check:fix": "npm run lint:fix && npm run format:fix",
+    "openapi:bundle": "redocly bundle openapi/index.yaml -o openapi/dist/openapi.yaml",
+    "openapi:lint": "redocly lint openapi/index.yaml"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
@@ -34,13 +38,19 @@
     "express": "^5.2.1",
     "jsonwebtoken": "^9.0.3",
     "pg": "^8.18.0",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1",
+    "yaml": "^2.8.2",
     "zod": "^4.3.6"
   },
   "devDependencies": {
+    "@redocly/cli": "^2.19.1",
     "@types/bcrypt": "^6.0.0",
     "@types/express": "^5.0.6",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^25.0.10",
+    "@types/swagger-jsdoc": "^6.0.4",
+    "@types/swagger-ui-express": "^4.1.8",
     "@typescript-eslint/eslint-plugin": "^8.53.1",
     "@typescript-eslint/parser": "^8.53.1",
     "eslint": "^9.39.2",
